@@ -4,6 +4,7 @@ import (
 	"crypto"
 	"encoding/json"
 	"fmt"
+	"mercan.dev/dumb-jose/internal/publickey"
 )
 
 type PublicKeyHeader interface{}
@@ -48,19 +49,19 @@ func ParseJWKKeysFromSet(data []byte) ([]JWK, error) {
 				return nil, fmt.Errorf("Insuitable key type %s for algorithm %s", jwk.KeyType, jwk.Algorithm)
 			}
 
-			jwk.PublicKey, err = ParseECDSAPublicKey(key)
+			jwk.PublicKey, err = publickey.ParseECDSAPublicKey(key)
 		case "RS256", "RS384", "RS512", "PS256", "PS384", "PS512":
 			if jwk.KeyType != "RSA" {
 				return nil, fmt.Errorf("Insuitable key type %s for algorithm %s", jwk.KeyType, jwk.Algorithm)
 			}
 
-			jwk.PublicKey, err = ParseRSAPublicKey(key)
+			jwk.PublicKey, err = publickey.ParseRSAPublicKey(key)
 		case "EdDSA":
 			if jwk.KeyType != "OKP" {
 				return nil, fmt.Errorf("Insuitable key type %s for algorithm %s", jwk.KeyType, jwk.Algorithm)
 			}
 
-			jwk.PublicKey, err = ParseEdDSAPublicKey(key)
+			jwk.PublicKey, err = publickey.ParseEdDSAPublicKey(key)
 		default:
 			return nil, fmt.Errorf("Invalid/Unsupported JWK Algorithm %s", jwk.Algorithm)
 		}

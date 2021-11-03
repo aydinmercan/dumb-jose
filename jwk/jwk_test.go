@@ -40,7 +40,7 @@ func TestCorrectJwkKeySet(t *testing.T) {
 
 	for i, kid := range []string{"bbd2ac7c4c5eb8adc8eeffbc8f5a2dd6cf7545e4", "85828c59284a69b54b27483e487c3bd46cd2a2b3"} {
 		if set[i].KeyID != kid {
-			t.Errorf("hhhhh")
+			t.Errorf("Key ID Mismatch (%s vs %s)", set[i].KeyID, kid)
 			t.Fail()
 		}
 	}
@@ -54,7 +54,7 @@ func TestCorrectJwkKeySet(t *testing.T) {
 
 func TestInvalidRSAExponent(t *testing.T) {
 	_, err := jwk.ParseJWKKeysFromSet([]byte(InvalidExponent))
-	if err != jwk.ErrUnsupportedPublicExponent {
+	if err == nil {
 		t.Errorf("Expected error not returned for unsupported public exponent, found \"%v\"", err)
 	}
 }

@@ -1,4 +1,4 @@
-package jwk
+package publickey
 
 import (
 	"encoding/base64"

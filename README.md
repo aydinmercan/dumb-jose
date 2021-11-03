@@ -17,6 +17,7 @@ Likewise, you shouldn't need me to tell you that you shouldn't use this library.
 * Just enough JWT for people to speak commonly encountered OAuth 2.0 and alike.
 * Don't allow for any of the sharp edges.
 * Allow for binding domain parameters as much as possible to the public keys.
+* Extensive test coverage even if a particular case seems pedantic, guaranteed to be handled properly and/or improbable to be problematic.
 
 ## Non-Goals
 

@@ -1,4 +1,4 @@
-package jwk
+package publickey
 
 import (
 	"crypto/ecdsa"
@@ -68,5 +68,4 @@ func ParseECDSAPublicKey(data []byte) (*ecdsa.PublicKey, error) {
 	}
 
 	return key, nil
-
 }

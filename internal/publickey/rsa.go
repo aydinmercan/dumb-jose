@@ -1,10 +1,11 @@
-package jwk
+package publickey
 
 import (
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"math/big"
 )
 
@@ -24,6 +25,10 @@ func ParseRSAPublicKey(data []byte) (*rsa.PublicKey, error) {
 	err := json.Unmarshal(data, &header)
 	if err != nil {
 		return nil, err
+	}
+
+	if header.Modulus == "" {
+		return nil, fmt.Errorf("Empty N")
 	}
 
 	rawN, err := base64.RawURLEncoding.DecodeString(header.Modulus)
