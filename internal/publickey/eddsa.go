@@ -1,6 +1,7 @@
 package publickey
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -12,10 +13,13 @@ type EdDSAPublicKeyHeader struct {
 	X     string `json:"x"`
 }
 
-func ParseEdDSAPublicKey(data []byte) (*ed25519.PublicKey, error) {
+func ParseEdDSAPublicKey(data json.RawMessage) (*ed25519.PublicKey, error) {
 	var header EdDSAPublicKeyHeader
 
-	err := json.Unmarshal(data, &header)
+	r := bytes.NewReader(data)
+	dec := json.NewDecoder(r)
+
+	err := dec.Decode(&header)
 	if err != nil {
 		return nil, err
 	}

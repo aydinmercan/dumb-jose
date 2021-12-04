@@ -4,6 +4,7 @@ import (
 	"crypto"
 	"encoding/json"
 	"fmt"
+	"io"
 	"mercan.dev/dumb-jose/internal/publickey"
 )
 
@@ -21,10 +22,12 @@ type jwkHeader struct {
 	Keys []json.RawMessage `json:"keys"`
 }
 
-func ParseJWKKeysFromSet(data []byte) ([]JWK, error) {
+func ParseKeysFromSet(r io.Reader) ([]JWK, error) {
+	dec := json.NewDecoder(r)
+
 	keys := jwkHeader{}
 
-	err := json.Unmarshal(data, &keys)
+	err := dec.Decode(&keys)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package publickey
 
 import (
+	"bytes"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"encoding/base64"
@@ -22,10 +23,13 @@ var (
 )
 
 // Rejects on invalid curve points with a branch
-func ParseECDSAPublicKey(data []byte) (*ecdsa.PublicKey, error) {
+func ParseECDSAPublicKey(data json.RawMessage) (*ecdsa.PublicKey, error) {
 	var header ECDSAPublicKeyHeader
 
-	err := json.Unmarshal(data, &header)
+	r := bytes.NewReader(data)
+	dec := json.NewDecoder(r)
+
+	err := dec.Decode(&header)
 	if err != nil {
 		return nil, err
 	}
@@ -57,6 +61,7 @@ func ParseECDSAPublicKey(data []byte) (*ecdsa.PublicKey, error) {
 	}
 
 	// Invalid curve attacks don't exactly apply here?
+	// We are only verifying signatures but shut up and check points.
 	if !curve.IsOnCurve(x, y) {
 		return nil, ErrInvalidCurvePoint
 	}

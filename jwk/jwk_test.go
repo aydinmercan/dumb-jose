@@ -1,6 +1,7 @@
 package jwk_test
 
 import (
+	"bytes"
 	"mercan.dev/dumb-jose/jwk"
 	"testing"
 )
@@ -33,7 +34,8 @@ const (
 )
 
 func TestCorrectJwkKeySet(t *testing.T) {
-	set, err := jwk.ParseJWKKeysFromSet([]byte(GoogleJwkKeySet))
+	r := bytes.NewReader([]byte(GoogleJwkKeySet))
+	set, err := jwk.ParseKeysFromSet(r)
 	if err != nil {
 		t.Errorf("Error while parsing JWK Keyset: %v", err)
 	}
@@ -45,7 +47,8 @@ func TestCorrectJwkKeySet(t *testing.T) {
 		}
 	}
 
-	set, err = jwk.ParseJWKKeysFromSet([]byte(ValidEd25519KeySet))
+	r = bytes.NewReader([]byte(ValidEd25519KeySet))
+	set, err = jwk.ParseKeysFromSet(r)
 	if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -53,7 +56,8 @@ func TestCorrectJwkKeySet(t *testing.T) {
 }
 
 func TestInvalidRSAExponent(t *testing.T) {
-	_, err := jwk.ParseJWKKeysFromSet([]byte(InvalidExponent))
+	r := bytes.NewReader([]byte(InvalidExponent))
+	_, err := jwk.ParseKeysFromSet(r)
 	if err == nil {
 		t.Errorf("Expected error not returned for unsupported public exponent, found \"%v\"", err)
 	}

@@ -1,6 +1,7 @@
 package publickey
 
 import (
+	"bytes"
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
@@ -18,11 +19,13 @@ var (
 	ErrUnsupportedPublicExponent = errors.New("Public exponent is not 65537")
 )
 
-func ParseRSAPublicKey(data []byte) (*rsa.PublicKey, error) {
-
+func ParseRSAPublicKey(data json.RawMessage) (*rsa.PublicKey, error) {
 	var header RSAPublicKeyHeader
 
-	err := json.Unmarshal(data, &header)
+	r := bytes.NewReader(data)
+	dec := json.NewDecoder(r)
+
+	err := dec.Decode(&header)
 	if err != nil {
 		return nil, err
 	}
