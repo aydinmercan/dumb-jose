@@ -8,8 +8,6 @@ import (
 	"mercan.dev/dumb-jose/internal/publickey"
 )
 
-type PublicKeyHeader interface{}
-
 type JWK struct {
 	KeyID     string           `json:"kid"`
 	KeyType   string           `json:"kty"`

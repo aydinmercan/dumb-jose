@@ -13,13 +13,13 @@ const (
 		"y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM"
 	}`
 
-	InvalidCurveType = `{
+	InvalidECDSACurveType = `{
 		"crv": "p-256",
 		"x": "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4",
 		"y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM"
 	}`
 
-	InvalidCurvePoint = `{
+	InvalidECDSACurvePoint = `{
 		"crv": "P-521",
 		"x": "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
 		"y": "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0"
@@ -28,18 +28,18 @@ const (
 
 var (
 	IncompleteECDSAPublicKeyPermutation = []string{
-		`{"crv": "P-256", "x": "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4"}`,
-		`{"crv": "P-256", "y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM"}`,
-		`{"x": "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU", "y": "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0"}`,
+		`{ "crv": "P-256", "x": "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4" }`,
+		`{ "crv": "P-256", "y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM" }`,
+		`{ "x": "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU", "y": "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0" }`,
 	}
 
-	MalformedKeyJSON = []string{
+	MalformedECDSAPublicKey = []string{
 		`Wait this isn't even JSON!`,
-		`{"crv": "P-521", "x": 1234567890, "y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM}"`,
+		`{ "crv": "P-521", "x": 1234567890, "y": "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM" }`,
 	}
 )
 
-func TestValidCurvePoint(t *testing.T) {
+func TestECDSAValidCurvePoint(t *testing.T) {
 	key, err := publickey.ParseECDSAPublicKey([]byte(ValidECDSAPublicKey))
 	if err != nil {
 		t.Fatalf("Expected pass while parsing, found %v", err)
@@ -50,21 +50,21 @@ func TestValidCurvePoint(t *testing.T) {
 	}
 }
 
-func TestInvalidCurveTypeDenial(t *testing.T) {
-	_, err := publickey.ParseECDSAPublicKey([]byte(InvalidCurveType))
+func TestECDSAInvalidCurveTypeDenial(t *testing.T) {
+	_, err := publickey.ParseECDSAPublicKey([]byte(InvalidECDSACurveType))
 	if err == nil {
 		t.Errorf("Expected failure for curve type but passed")
 	}
 }
 
-func TestInvalidCurvePointDenial(t *testing.T) {
-	_, err := publickey.ParseECDSAPublicKey([]byte(InvalidCurvePoint))
+func TestECDSAInvalidCurvePointDenial(t *testing.T) {
+	_, err := publickey.ParseECDSAPublicKey([]byte(InvalidECDSACurvePoint))
 	if err != publickey.ErrInvalidCurvePoint {
 		t.Errorf("Expected invalid curve point failure, found: %v", err)
 	}
 }
 
-func TestIncompleteHeaderDenial(t *testing.T) {
+func TestECDSAIncompletePublicKeyDenial(t *testing.T) {
 	for _, key := range IncompleteECDSAPublicKeyPermutation {
 		_, err := publickey.ParseECDSAPublicKey([]byte(key))
 		if err == nil {
@@ -73,8 +73,8 @@ func TestIncompleteHeaderDenial(t *testing.T) {
 	}
 }
 
-func TestMalformedHeaderDenial(t *testing.T) {
-	for _, key := range MalformedKeyJSON {
+func TestECDSAMalformedPublicKeyDenial(t *testing.T) {
+	for _, key := range MalformedECDSAPublicKey {
 		_, err := publickey.ParseECDSAPublicKey([]byte(key))
 		if err == nil {
 			t.Errorf("Expected to fail but didn't")
