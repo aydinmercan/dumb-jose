@@ -1,0 +1,6 @@
+pipeline:
+  test:
+    image: alpine
+    commands:
+      - apk add -U --no-cache go
+      - go test -v -race ./...
