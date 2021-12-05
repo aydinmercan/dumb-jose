@@ -1,5 +1,6 @@
 # Dumb JOSE
 
+[![treehouse-ci](https://woodpecker.treehouse.systems/api/badges/jmercan/dumb-jose/status.svg)](https://woodpecker.treehouse.systems/jmercan/dumb-jose)
 [![github-action](https://github.com/aydinmercan/dumb-jose/actions/workflows/test.yaml/badge.svg)](https://github.com/aydinmercan/dumb-jose/actions/workflows/test.yaml)
 
 Insecure library for a set of insecure formats.
